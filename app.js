@@ -2,7 +2,7 @@
   "use strict";
 
   const CFG = window.APP_CONFIG || {};
-  const API_URL = String(CFG.API_URL || "").trim();
+  const API_URL = String(CFG.API_URL || "https://script.google.com/macros/s/AKfycbyFkhZHRGhnHqQ00vdrpIWaV8VYmouc3Fi53QOE2LkGxkDoSg44fwmX2G3u2vUh8zhLZg/exec").trim();
   const state = {
     token: "",
     user: null,
