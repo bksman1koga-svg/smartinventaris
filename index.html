@@ -12,7 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
-<script src="assets/js/config.js?v=210"></script>
+<script src="config.js?v=210"></script>
 </head>
 <body>
 <div id="toast" class="toast"></div>
@@ -94,6 +94,6 @@
 <div id="transactionModal" class="modal"><div class="modal-card"><div class="modal-head"><h3>Tambah Transaksi</h3><button id="closeTransaction">×</button></div><div class="formgrid"><label>Tanggal<input id="tTanggal" type="date"></label><label>Jenis<select id="tJenis"><option>Masuk</option><option>Keluar</option><option>Rusak</option></select></label><label>Kode Barang<input id="tKode"></label><label>Jumlah<input id="tJumlah" type="number" min="1"></label><label class="wide">Keterangan<textarea id="tKeterangan"></textarea></label></div><div class="modal-actions"><button id="closeTransaction" class="iconbtn">Batal</button><button id="saveTransactionBtn" class="primary">Simpan</button></div></div></div>
 
 <div id="qrModal" class="modal"><div class="modal-card center"><div class="modal-head"><h3>QR Barang</h3><button onclick="document.getElementById('qrModal').classList.remove('open')">×</button></div><div id="qrBox"></div><b id="qrCodeText"></b></div></div>
-<script src="assets/js/app.js?v=210"></script>
+<script src="app.js?v=210"></script>
 </body>
 </html>
