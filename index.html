@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6d5dfc">
+<title>Inventaris Sekolah V2.1</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="assets/css/style.css?v=210">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
+<script src="assets/js/config.js?v=210"></script>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<section id="loginView" class="login-wrap">
+  <div class="login-card">
+    <div class="brand big">📦 <span>Inventaris Sekolah</span></div>
+    <div class="version">V2.1</div>
+    <h1>Selamat datang</h1>
+    <p>Kelola aset sekolah, transaksi, laporan dan backup dalam satu aplikasi.</p>
+    <label>Username<input id="username" autocomplete="username" placeholder="admin"></label>
+    <label>Password<input id="password" type="password" autocomplete="current-password" placeholder="••••••••"></label>
+    <button id="loginBtn" class="primary full">Masuk</button>
+    <div id="connectionStatus" class="connection bad">● Memeriksa koneksi...</div>
+    <small>Versi <span id="version">2.1.0</span></small>
+  </div>
+</section>
+
+<section id="appView" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand">📦 <span>Inventaris</span></div>
+    <div class="profile"><b id="userName">Admin</b><small id="userRole">Admin</small></div>
+    <nav class="nav">
+      <button data-screen="dashboard" class="active">▦ Dashboard</button>
+      <button data-screen="inventory">▤ Data Inventaris</button>
+      <button data-screen="transactions">↔ Transaksi</button>
+      <button data-screen="reports">▥ Laporan</button>
+      <button data-screen="settings">⚙ Pengaturan</button>
+    </nav>
+    <button id="logoutBtn" class="logout">↪ Keluar</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><b>Inventaris Sekolah</b><span id="connectionStatus" class="connection bad">● Memeriksa koneksi...</span></div>
+      <div class="actions"><button id="healthBtn" class="iconbtn">Cek koneksi</button><button id="refreshBtn" class="iconbtn">↻</button><button id="themeBtn" class="iconbtn">◐</button></div>
+    </header>
+
+    <section id="dashboard" class="screen active">
+      <div class="hero"><div><span>RINGKASAN INVENTARIS</span><h1>Kelola aset sekolah dengan lebih mudah.</h1><p>Pantau stok, kondisi, transaksi, dan laporan dalam satu dashboard.</p></div><div class="hero-icon">✦</div></div>
+      <div class="cards">
+        <div class="card"><span>Total Barang</span><b id="statTotal">0</b><small>unit</small></div>
+        <div class="card"><span>Barang Masuk</span><b id="statMasuk">0</b><small>unit</small></div>
+        <div class="card"><span>Barang Keluar</span><b id="statKeluar">0</b><small>unit</small></div>
+        <div class="card"><span>Barang Rusak</span><b id="statRusak">0</b><small>unit</small></div>
+      </div>
+      <div class="grid2"><div class="panel"><h3>Statistik Kategori</h3><div id="categoryStats"></div></div><div class="panel"><h3>Statistik Ruangan</h3><div id="roomStats"></div></div></div>
+    </section>
+
+    <section id="inventory" class="screen">
+      <div class="sectionhead"><div><h2>Data Inventaris</h2><p>Kelola seluruh aset sekolah.</p></div><div class="actions"><button id="addBtn" class="primary">＋ Tambah Barang</button><label class="filebtn">↑ Import Excel<input id="importFile" type="file" accept=".xlsx,.xls,.csv"></label></div></div>
+      <div class="toolbar"><input id="search" placeholder="⌕ Cari kode, nama barang..."><select id="filterCategory"><option value="">Semua kategori</option></select><select id="filterRoom"><option value="">Semua ruangan</option></select></div>
+      <div class="tablewrap"><table><thead><tr><th>Kode</th><th>Barang</th><th>Kategori</th><th>Ruangan</th><th>Jumlah</th><th>Kondisi</th><th>QR</th><th>Aksi</th></tr></thead><tbody id="inventoryBody"></tbody></table></div>
+    </section>
+
+    <section id="transactions" class="screen">
+      <div class="sectionhead"><div><h2>Transaksi</h2><p>Catat barang masuk, keluar dan rusak.</p></div><button id="newTransactionBtn" class="primary">＋ Transaksi</button></div>
+      <div class="tablewrap"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Kode</th><th>Jumlah</th><th>Keterangan</th></tr></thead><tbody id="transactionBody"></tbody></table></div>
+    </section>
+
+    <section id="reports" class="screen">
+      <div class="sectionhead"><div><h2>Laporan</h2><p>Ekspor data inventaris untuk kebutuhan administrasi.</p></div><div class="actions"><button id="pdfBtn" class="primary">PDF</button><button id="excelBtn" class="iconbtn">Excel</button><button id="csvBtn" class="iconbtn">CSV</button></div></div>
+      <div id="reportSummary"></div>
+    </section>
+
+    <section id="settings" class="screen">
+      <div class="sectionhead"><div><h2>Pengaturan</h2><p>Identitas sekolah dan backup database.</p></div></div>
+      <div class="panel formgrid">
+        <label>Nama Sekolah<input id="sNama"></label><label>Kepala Sekolah<input id="sKepala"></label><label>Penanggung Jawab<input id="sPJ"></label><label>NIP<input id="sNIP"></label><label>Logo URL<input id="sLogo"></label><label>Tema<select id="sTheme"><option value="light">Terang</option><option value="dark">Gelap</option></select></label>
+        <button id="saveSettingsBtn" class="primary">Simpan Pengaturan</button>
+      </div>
+      <div class="panel"><h3>Backup & Restore</h3><p>Backup mengunduh data inventaris dan transaksi sebagai JSON.</p><div class="actions"><button id="backupBtn" class="iconbtn">↓ Backup Database</button><label class="filebtn">↑ Restore Database<input id="restoreFile" type="file" accept=".json"></label></div></div>
+    </section>
+  </main>
+</section>
+
+<div id="itemModal" class="modal"><div class="modal-card"><div class="modal-head"><h3 id="modalTitle">Tambah Barang</h3><button id="closeItem">×</button></div><div class="formgrid"><label>Kode<input id="fKode"></label><label>Nama Barang<input id="fNama"></label><label>Kategori<input id="fKategori"></label><label>Ruangan<input id="fRuangan"></label><label>Jumlah<input id="fJumlah" type="number" min="0"></label><label>Kondisi<select id="fKondisi"><option>Baik</option><option>Rusak Ringan</option><option>Rusak Berat</option></select></label><label>Sumber<input id="fSumber"></label><label>Foto URL<input id="fFoto"></label><label class="wide">Keterangan<textarea id="fKeterangan"></textarea></label></div><div class="modal-actions"><button id="cancelItem" class="iconbtn">Batal</button><button id="saveItemBtn" class="primary">Simpan</button></div></div></div>
+
+<div id="transactionModal" class="modal"><div class="modal-card"><div class="modal-head"><h3>Tambah Transaksi</h3><button id="closeTransaction">×</button></div><div class="formgrid"><label>Tanggal<input id="tTanggal" type="date"></label><label>Jenis<select id="tJenis"><option>Masuk</option><option>Keluar</option><option>Rusak</option></select></label><label>Kode Barang<input id="tKode"></label><label>Jumlah<input id="tJumlah" type="number" min="1"></label><label class="wide">Keterangan<textarea id="tKeterangan"></textarea></label></div><div class="modal-actions"><button id="closeTransaction" class="iconbtn">Batal</button><button id="saveTransactionBtn" class="primary">Simpan</button></div></div></div>
+
+<div id="qrModal" class="modal"><div class="modal-card center"><div class="modal-head"><h3>QR Barang</h3><button onclick="document.getElementById('qrModal').classList.remove('open')">×</button></div><div id="qrBox"></div><b id="qrCodeText"></b></div></div>
+<script src="assets/js/app.js?v=210"></script>
+</body>
+</html>
