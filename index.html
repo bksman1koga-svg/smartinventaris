@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SMART INVENTARIS — SMAN 1 Kota Gajah</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<div id="loginView" class="login-wrap">
+  <div class="login-card">
+    <div class="brand-mark">SI</div>
+    <h1>SMART INVENTARIS</h1><p>SMAN 1 Kota Gajah</p>
+    <label>URL Google Apps Script Web App</label>
+    <input id="apiUrl" placeholder="https://script.google.com/macros/s/.../exec">
+    <label>Username</label><input id="username" value="admin" autocomplete="username">
+    <label>Password</label><input id="password" type="password" value="admin123" autocomplete="current-password">
+    <button class="primary full" id="loginBtn">Masuk</button>
+    <div class="hint">Pastikan Web App Apps Script sudah dideploy sebagai <b>Anyone</b>.</div>
+  </div>
+</div>
+<div id="app" class="hidden">
+  <aside class="sidebar">
+    <div class="side-brand"><div class="brand-mark small">SI</div><div><b>SMART INVENTARIS</b><small>SMAN 1 Kota Gajah</small></div></div>
+    <nav>
+      <button data-page="dashboard" class="nav active">▦ <span>Dashboard</span></button>
+      <button data-page="inventaris" class="nav">▤ <span>Inventaris</span></button>
+      <button data-page="transaksi" class="nav">↔ <span>Transaksi</span></button>
+      <button data-page="pengaturan" class="nav">⚙ <span>Pengaturan</span></button>
+    </nav>
+    <button id="logoutBtn" class="logout">Keluar</button>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><h2 id="pageTitle">Dashboard</h2><small id="userInfo"></small></div><button id="refreshBtn" class="ghost">↻ Muat ulang</button></header>
+    <section id="page-dashboard" class="page"></section>
+    <section id="page-inventaris" class="page hidden"></section>
+    <section id="page-transaksi" class="page hidden"></section>
+    <section id="page-pengaturan" class="page hidden"></section>
+  </main>
+</div>
+<script src="config.js"></script><script src="script.js"></script>
+</body></html>
